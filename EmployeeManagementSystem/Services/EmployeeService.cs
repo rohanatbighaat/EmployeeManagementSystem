@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Exceptions;
+﻿using EmployeeManagementSystem.Dto;
+using EmployeeManagementSystem.Exceptions;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Model;
 using EmployeeManagementSystem.Repository;
@@ -12,9 +13,11 @@ namespace EmployeeManagementSystem.Services
         private readonly ICrudOperationDL _crudOperationDL;
 
         private readonly ScnEncoder _scnEncoder;
-        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder) {
+        private readonly EmployeeDto _employeeDto;
+        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, EmployeeDto employeeDto) {
             _crudOperationDL = crudOperationDL;
             _scnEncoder = scnEncoder;
+            _employeeDto = employeeDto;
         }
 
         public async Task<ApiResponse> DeleteRecordById(string ID)
@@ -47,9 +50,19 @@ namespace EmployeeManagementSystem.Services
             response.Message = "Data Extraction successful";
             try
             { 
-                response.dataList = new List<InsertRecordRequest>();
-                response.dataList = await _crudOperationDL.GetAllRecord();
-                if (response.dataList.Count == 0)
+                response.data = new List<EmployeeDto>();
+                List<InsertRecordRequest> recordList = await _crudOperationDL.GetAllRecord(); //response.data
+                foreach (InsertRecordRequest record in recordList)
+                {
+                    EmployeeDto emp = new EmployeeDto();
+                    emp.FirstName= record.FirstName;
+                    emp.LastName= record.LastName;
+                    emp.PhoneNumber= record.PhoneNumber;
+                    emp.Role= record.Role;
+                    response.data.Add(emp);
+
+                }
+                if (response.data.Count == 0)
                 {
                     response.Message = "No data to display";
                 }
@@ -69,9 +82,15 @@ namespace EmployeeManagementSystem.Services
             response.Message = "Data Extraction successful";
             try
             {
-                response.data = new InsertRecordRequest();
-                response.data = await _crudOperationDL.GetRecordById(ID);   
-                if (response.data == null)
+                InsertRecordRequest record = await _crudOperationDL.GetRecordById(ID);   
+                response.data = new List<EmployeeDto>();
+                EmployeeDto emp = new EmployeeDto();
+                emp.FirstName = record.FirstName;
+                emp.LastName = record.LastName;
+                emp.PhoneNumber = record.PhoneNumber;
+                emp.Role = record.Role;
+                response.data.Add(emp);
+                if (response.data.Count == 0)
                 {
                     response.Message = "No data to display";
                 }

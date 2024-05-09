@@ -1,3 +1,4 @@
+using EmployeeManagementSystem.Dto;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Model;
 using EmployeeManagementSystem.Repository;
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<ICrudOperationDL, CrudOperationDL>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddSingleton<ScnEncoder>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<EmployeeDto>();
 builder.Services.AddSwaggerGen(swagger =>
 {
     //This is to generate the Default UI of Swagger Documentation
