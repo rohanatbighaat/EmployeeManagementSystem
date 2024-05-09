@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EmployeeManagementSystem.Model;
 using Amazon.Runtime.Internal;
+using EmployeeManagementSystem.Services;
+using EmployeeManagementSystem.Helpers;
 
 namespace EmployeeManagementSystem.Controllers
 {
@@ -10,26 +12,21 @@ namespace EmployeeManagementSystem.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly ICrudOperationDL _crudOperationDL;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(ICrudOperationDL crudOperationDL)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _crudOperationDL = crudOperationDL;
+            _employeeService = employeeService;
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> OnboardEmployee(InsertRecordRequest request)
         {
             ApiResponse response = new ApiResponse(); 
-            try
-            {
-                response = await _crudOperationDL.InsertRecord(request);
-            }
-            catch(Exception e)
-            {
-                response.Success = false;
-                response.Message= "Exception occured: "+ e.Message;
-            }
+            
+                response = await _employeeService.InsertRecord(request);
+      
             return Ok(response);
         }
 
@@ -37,15 +34,9 @@ namespace EmployeeManagementSystem.Controllers
         public async Task<IActionResult> ViewAllEmployee()
         {
             ApiResponse response = new ApiResponse();
-            try
-            {
-                response = await _crudOperationDL.GetAllRecord();
-            }
-            catch (Exception e)
-            {
-                response.Success = false;
-                response.Message = "Exception occured: " + e.Message;
-            }
+           
+                response = await _employeeService.GetAllRecord();
+            
             return Ok(response);
         }
 
@@ -53,47 +44,32 @@ namespace EmployeeManagementSystem.Controllers
         public async Task<IActionResult> ViewEmployeeById([FromQuery]string ID)
         {
             ApiResponse response = new ApiResponse();
-            try
-            {
-                response = await _crudOperationDL.GetRecordById(ID);
-            }
-            catch (Exception e)
-            {
-                response.Success = false;
-                response.Message = "Exception occured: " + e.Message;
-            }
+           
+                response = await _employeeService.GetRecordById(ID);
+           
             return Ok(response);
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateSalaryById([FromQuery] string ID, [FromQuery] int salary)
         {
             ApiResponse response = new ApiResponse();
-            try
-            {
-                response = await _crudOperationDL.UpdateRecordById(ID, salary);
-            }
-            catch (Exception e)
-            {
-                response.Success = false;
-                response.Message = "Exception occured: " + e.Message;
-            }
+
+
+                response = await _employeeService.UpdateRecordById(ID, salary);
+           
             return Ok(response);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteEmployeeById([FromQuery] string ID)
+        [Authorize]
+        public async Task<IActionResult> OffBoardEmployee([FromQuery] string ID)
         {
             ApiResponse response = new ApiResponse();
-            try
-            {
-                response = await _crudOperationDL.DeleteRecordById(ID);
-            }
-            catch (Exception e)
-            {
-                response.Success = false;
-                response.Message = "Exception occured: " + e.Message;
-            }
+           
+                response = await _employeeService.DeleteRecordById(ID);
+            
             return Ok(response);
         }
 

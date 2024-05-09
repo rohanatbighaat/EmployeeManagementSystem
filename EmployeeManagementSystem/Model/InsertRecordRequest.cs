@@ -8,8 +8,8 @@ namespace EmployeeManagementSystem.Model
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string? Id { get; set; }
-        public string CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
+        public string? CreatedAt { get; set; }
+        public string? UpdatedAt { get; set; }
 
         [Required]
         [BsonElement("Name")]
@@ -19,10 +19,13 @@ namespace EmployeeManagementSystem.Model
         public string LastName { get; set; }
 
         [Required]
+        public string Scn { get; set; }
+
+        [Required]
         public int Age { get; set; }
 
         [Required]
-        public string PhonenNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public string Role { get; set; }
