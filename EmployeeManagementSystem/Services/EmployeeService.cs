@@ -13,11 +13,9 @@ namespace EmployeeManagementSystem.Services
         private readonly ICrudOperationDL _crudOperationDL;
 
         private readonly ScnEncoder _scnEncoder;
-        private readonly EmployeeDto _employeeDto;
         public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, EmployeeDto employeeDto) {
             _crudOperationDL = crudOperationDL;
             _scnEncoder = scnEncoder;
-            _employeeDto = employeeDto;
         }
 
         public async Task<ApiResponse> DeleteRecordById(string ID)
@@ -51,7 +49,7 @@ namespace EmployeeManagementSystem.Services
             try
             { 
                 response.data = new List<EmployeeDto>();
-                List<InsertRecordRequest> recordList = await _crudOperationDL.GetAllRecord(); //response.data
+                List<InsertRecordRequest> recordList = await _crudOperationDL.GetAllRecord();
                 foreach (InsertRecordRequest record in recordList)
                 {
                     EmployeeDto emp = new EmployeeDto();
@@ -117,7 +115,13 @@ namespace EmployeeManagementSystem.Services
                 {
                     throw new InvalidPhoneNumberException("Invalid phone number. Please try again with a valid phone number.");
                 }
+                // here call the api: https://country-code-au6g.vercel.app/Country.json and store the data in the cache, use the data to map the country code to the dial code and append it accordingly.
                 request.PhoneNumber = "+91 " + request.PhoneNumber;
+                bool isPhoneNumberPreviouslyExists = await _crudOperationDL.DoesPhoneNumberExists(request.PhoneNumber);
+                if(isPhoneNumberPreviouslyExists)
+                {
+                    throw new InvalidPhoneNumberException("Pre-existing phone Number. Please try again with a valid phone number.");
+                }
                 request.Scn = _scnEncoder.EncodeScn(request.Scn);
                 await _crudOperationDL.InsertRecord(request);
 

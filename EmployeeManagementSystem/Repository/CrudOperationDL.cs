@@ -1,8 +1,10 @@
 ﻿using EmployeeManagementSystem.Exceptions;
 using EmployeeManagementSystem.Model;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Reflection.Metadata.Ecma335;
+using System.Xml.Linq;
 
 namespace EmployeeManagementSystem.Repository
 {
@@ -58,5 +60,12 @@ namespace EmployeeManagementSystem.Repository
         {
             return await _mongoCollection.Find(x => (x.FirstName == name && x.Scn== scn)).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> DoesPhoneNumberExists(string phoneNumber)
+        {
+            var result=  await _mongoCollection.Find(x => (x.PhoneNumber == phoneNumber)).FirstOrDefaultAsync();
+            return (result == null) ? false : true;
+        }
     }
 }
+ 

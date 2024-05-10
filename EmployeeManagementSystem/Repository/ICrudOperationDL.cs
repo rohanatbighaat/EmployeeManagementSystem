@@ -12,5 +12,6 @@ namespace EmployeeManagementSystem.Repository
         public Task<bool> UpdateRecordById(string ID, int salary);
         public Task<bool> DeleteRecordById(string ID);
         public Task<InsertRecordRequest> GetRecordByNameAndScn(string name, string scn);
+        public Task<bool> DoesPhoneNumberExists(string phoneNumber);
     }
 }
