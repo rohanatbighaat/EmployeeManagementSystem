@@ -115,7 +115,7 @@ namespace EmployeeManagementSystem.Services
                 {
                     throw new InvalidPhoneNumberException("Invalid phone number. Please try again with a valid phone number.");
                 }
-                // here call the api: https://country-code-au6g.vercel.app/Country.json and store the data in the cache, use the data to map the country code to the dial code and append it accordingly.
+                // here call the api: https://country-code-au6g.vercel.app/Country.json and store the data in the cache, use the data to map the country code to the dial code and append it accordingly
                 request.PhoneNumber = "+91 " + request.PhoneNumber;
                 bool isPhoneNumberPreviouslyExists = await _crudOperationDL.DoesPhoneNumberExists(request.PhoneNumber);
                 if(isPhoneNumberPreviouslyExists)
