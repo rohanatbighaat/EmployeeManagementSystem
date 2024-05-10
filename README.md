@@ -20,3 +20,6 @@
 ### 1) .NET 8
 ### 2) C# programming Language
 ### 3) MongoDB
+
+## Learnings
+### 1) Whenever you make a change in the remote repository, make sure to take the latest pull into to the local repository.
