@@ -32,5 +32,8 @@ namespace EmployeeManagementSystem.Model
 
         public int Salary { get; set; }
 
+        [Required]
+        public string CountryName { get; set; }
+
     }
 }
