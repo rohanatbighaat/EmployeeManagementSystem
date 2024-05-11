@@ -5,6 +5,7 @@ using EmployeeManagementSystem.Model;
 using Amazon.Runtime.Internal;
 using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Helpers;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EmployeeManagementSystem.Controllers
 {
@@ -31,6 +32,7 @@ namespace EmployeeManagementSystem.Controllers
         }
 
         [HttpGet]
+        [EnableRateLimiting("fixed")]
         public async Task<IActionResult> ViewAllEmployee()
         {
             ApiResponse response = new ApiResponse();
@@ -41,6 +43,7 @@ namespace EmployeeManagementSystem.Controllers
         }
 
         [HttpGet]
+        [EnableRateLimiting("fixed")]
         public async Task<IActionResult> ViewEmployeeById([FromQuery]string ID)
         {
             ApiResponse response = new ApiResponse();

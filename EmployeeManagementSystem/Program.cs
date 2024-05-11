@@ -3,6 +3,7 @@ using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Model;
 using EmployeeManagementSystem.Repository;
 using EmployeeManagementSystem.Services;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,17 @@ builder.Services.AddSingleton<EmployeeDto>();
 builder.Services.AddSingleton<Country>();
 builder.Services.AddSingleton<DialCodeHelper>();
 builder.Services.AddLazyCache();
+builder.Services.AddRateLimiter( rateLimiterOptions =>
+{
+    rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
+    {
+        options.QueueLimit = 0;
+        options.PermitLimit = 3;
+        options.Window = TimeSpan.FromSeconds(10);
+    });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+}
+    );
 builder.Services.AddSwaggerGen(swagger =>
 {
     //This is to generate the Default UI of Swagger Documentation
@@ -74,5 +86,7 @@ app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
+
+app.UseRateLimiter();
 
 app.Run();
