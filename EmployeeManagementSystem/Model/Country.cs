@@ -1,4 +1,6 @@
-﻿namespace EmployeeManagementSystem.Model
+﻿using System.Text.Json.Serialization;
+
+namespace EmployeeManagementSystem.Model
 {
     public class Country
     {

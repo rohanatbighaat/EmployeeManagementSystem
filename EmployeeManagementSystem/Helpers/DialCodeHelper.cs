@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementSystem.Model;
+using LazyCache;
 using Newtonsoft.Json;
 using System.Diagnostics.Metrics;
 
@@ -6,7 +7,11 @@ namespace EmployeeManagementSystem.Helpers
 {
     public class DialCodeHelper
     {
-       
+        private readonly IAppCache _cache;
+       public DialCodeHelper(IAppCache cache)
+        {
+            _cache = cache;
+        }
         public async Task<string> GetDialCodeAsync(string countryName)
         {
             string apiUrl = "https://country-code-au6g.vercel.app/Country.json";
@@ -15,20 +20,14 @@ namespace EmployeeManagementSystem.Helpers
             {
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    HttpResponseMessage response = await _cache.GetOrAdd("DialCodes.Get", ()=> client.GetAsync(apiUrl), DateTime.Now.AddMinutes(10));
 
                     if (response.IsSuccessStatusCode)
                     {
                         string jsonString = await response.Content.ReadAsStringAsync();
                         // Deserialize JSON response
                         var countries = JsonConvert.DeserializeObject<List<Country>>(jsonString);
-                        //int i = 0;
-                        //foreach (var county in countries)
-                        //{
-                          //  i++;
-                            //Console.WriteLine($"Name: {county.Name}, Dial Code: {county.DialCode}");
-                            //if (i == 5) break;
-                        //}
+                  
 
                         // Find the country with matching name
                         var country = countries.FirstOrDefault(c => c.Name.Equals(countryName, StringComparison.OrdinalIgnoreCase));

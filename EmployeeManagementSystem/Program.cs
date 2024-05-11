@@ -21,6 +21,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<EmployeeDto>();
 builder.Services.AddSingleton<Country>();
 builder.Services.AddSingleton<DialCodeHelper>();
+builder.Services.AddLazyCache();
 builder.Services.AddSwaggerGen(swagger =>
 {
     //This is to generate the Default UI of Swagger Documentation
