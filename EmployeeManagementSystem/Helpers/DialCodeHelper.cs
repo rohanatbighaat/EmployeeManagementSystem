@@ -8,6 +8,8 @@ namespace EmployeeManagementSystem.Helpers
     public class DialCodeHelper
     {
         private readonly IAppCache _cache;
+
+       public DialCodeHelper() { }
        public DialCodeHelper(IAppCache cache)
         {
             _cache = cache;
