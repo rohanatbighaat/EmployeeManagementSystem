@@ -32,6 +32,7 @@ namespace EmployeeManagementSystem.Services
                 bool Result= await _crudOperationDL.DeleteRecordById(ID);
                 if (!Result)
                 {
+                    response.Success=false;
                     response.Message = "Employee Deletion Failed";
                 }
 
