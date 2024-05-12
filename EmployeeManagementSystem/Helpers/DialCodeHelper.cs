@@ -14,7 +14,7 @@ namespace EmployeeManagementSystem.Helpers
         {
             _cache = cache;
         }
-        public async Task<string> GetDialCodeAsync(string countryName)
+        public virtual async Task<string> GetDialCodeAsync(string countryName)
         {
             string apiUrl = "https://country-code-au6g.vercel.app/Country.json";
 
