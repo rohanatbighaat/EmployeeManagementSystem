@@ -15,7 +15,7 @@ namespace EmployeeManagementSystem.Services
         private readonly ScnEncoder _scnEncoder;
 
         private readonly DialCodeHelper _dialCodeHelper;
-        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, EmployeeDto employeeDto, DialCodeHelper dialCodeHelper)
+        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, DialCodeHelper dialCodeHelper)
         {
             _crudOperationDL = crudOperationDL;
             _scnEncoder = scnEncoder;
