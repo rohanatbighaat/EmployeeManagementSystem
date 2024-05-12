@@ -12,6 +12,9 @@
 ### 1) CRUD operations: GET, POST, PUT and DELETE.
 ### 2) JWT Authentication
 ### 3) Role based Authorization
+### 4) Caching the external API data
+### 5) Rate Limiting
+### 6) Unit Tests
 
 ## Code Architecture
 ### Model-View-Controller (MVC) Architecture
