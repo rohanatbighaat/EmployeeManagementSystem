@@ -7,7 +7,7 @@ using Moq;
 
 namespace EmployeeManagementSystem.Test
 {
-    public class EmployeeControllerTest// : IClassFixture<EmployeeController>
+    public class EmployeeControllerTest
     {
         private readonly Mock<IEmployeeService> _employeeService;
 
@@ -65,6 +65,7 @@ namespace EmployeeManagementSystem.Test
         [Fact]
         public async Task Add_Employee_Success()
         {
+            //Arrange
             var _apiResponse = new ApiResponse()
             {
                 Success = true,
@@ -86,56 +87,10 @@ namespace EmployeeManagementSystem.Test
             Assert.Equal("Onboarding successful", apiResponse.Message);
             
         }
-        /*
-        [Fact]
-        public async Task Add_Employee_PhoneNumber_Faliure()
-        {
-            InsertRecordRequest employee = new InsertRecordRequest()
-            {
-                FirstName = "Katrina",
-                LastName = "Kaif",
-                Scn = "djdpd",
-                Age = 40,
-                PhoneNumber = "12623111",
-                Role = "Product Manager",
-                Salary = 2133,
-                CountryName = "Egypt"
-            };
-
-            // Act
-            var response = await _controller.OnboardEmployee(employee) as ApiResponse;
-            // Assert
-            Assert.False(response.Success); // Check if the operation was successful
-            Assert.Equal("Exception occured:Invalid phone number. Please try again with a valid phone number.", response.Message);
-            Assert.Null(response.data);
-        }
-
-        [Fact]
-        public async Task Add_Employee_PhoneNumber_AlreadyExists()
-        {
-            InsertRecordRequest employee = new InsertRecordRequest()
-            {
-                FirstName = "Katrina",
-                LastName = "Kaif",
-                Scn = "djdpd",
-                Age = 40,
-                PhoneNumber = "9380601863",
-                Role = "Product Manager",
-                Salary = 2133,
-                CountryName = "Egypt"
-            };
-
-            // Act
-            var response = await _controller.OnboardEmployee(employee) as ApiResponse;
-            // Assert
-            Assert.False(response.Success); // Check if the operation was successful
-            Assert.Equal("Pre-existing phone Number. Please try again with a valid phone number.", response.Message);
-            Assert.Null(response.data);
-        }
-        */
         [Fact]
         public async Task Delete_Employee_Success()
         {
+            //Arrange
             var _apiResponse = new ApiResponse()
             {
                 Success = true,

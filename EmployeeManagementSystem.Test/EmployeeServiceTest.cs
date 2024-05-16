@@ -20,7 +20,6 @@ namespace EmployeeManagementSystem.Test
         private readonly Mock<ICrudOperationDL> _crudOperation;
         private readonly Mock<ScnEncoder> _scnEncoder;
         private readonly Mock<DialCodeHelper> _dialCodeHelper;
-        //IAppCache
         public EmployeeServiceTest()
         {
             _crudOperation = new Mock<ICrudOperationDL>();
@@ -34,25 +33,25 @@ namespace EmployeeManagementSystem.Test
             List<InsertRecordRequest> employeeRecords= new List<InsertRecordRequest> { 
             new InsertRecordRequest
             {
-                 FirstName= "Ranbir",
-                 LastName= "Kapoor",
-                  Scn= "raha",
-                  Age= 42,
+                 FirstName= "Test_First_Name_1",
+                 LastName= "Test_Last_Name_1",
+                  Scn= "test_scn_1",
+                  Age= 20,
                   PhoneNumber= "1332611111",
-                  Role= "Marketing",
+                  Role= "Test_Role",
                   Salary= 2933,
-                  CountryName= "Egypt"
+                  CountryName= "Test_Country_1"
             },
             new InsertRecordRequest
             {
-                 FirstName= "Kareena",
-                 LastName= "Kapoor",
-                  Scn= "taimur",
+                 FirstName= "Test_First_Name_1",
+                 LastName= "Test_Last_Name_1",
+                  Scn= "test_scn_2",
                   Age= 45,
                   PhoneNumber= "1332669111",
-                  Role= "PR",
+                  Role= "Test_Role",
                   Salary= 2943,
-                  CountryName= "United States"
+                  CountryName= "Test_Country_2"
             }
             }; 
 
@@ -75,17 +74,16 @@ namespace EmployeeManagementSystem.Test
         public async Task Get_EmployeeById_Success()
         {
             //Arrange
-            InsertRecordRequest employeeRecord = new InsertRecordRequest {
-            
-                 FirstName= "Ranbir",
-                 LastName= "Kapoor",
-                  Scn= "raha",
-                  Age= 42,
-                  PhoneNumber= "1332611111",
-                  Role= "Marketing",
-                  Salary= 2933,
-                  CountryName= "Egypt"
-            
+            InsertRecordRequest employeeRecord = new InsertRecordRequest
+            {
+                FirstName = "Test_First_Name_1",
+                LastName = "Test_Last_Name_1",
+                Scn = "test_scn_1",
+                Age = 20,
+                PhoneNumber = "1332611111",
+                Role = "Test_Role",
+                Salary = 2933,
+                CountryName = "Test_Country_1"
             };
 
             _crudOperation.Setup(x => x.GetRecordById(It.IsAny<string>())).ReturnsAsync(employeeRecord);
@@ -109,21 +107,18 @@ namespace EmployeeManagementSystem.Test
             //Arrange
             InsertRecordRequest employeeRecord = new InsertRecordRequest
             {
-
-                FirstName = "Ranbir",
-                LastName = "Kapoor",
-                Scn = "raha",
-                Age = 42,
+                FirstName = "Test_First_Name_1",
+                LastName = "Test_Last_Name_1",
+                Scn = "test_scn_1",
+                Age = 20,
                 PhoneNumber = "1332611111",
-                Role = "Marketing",
+                Role = "Test_Role",
                 Salary = 2933,
-                CountryName = "Egypt"
-
+                CountryName = "Test_Country_1"
             };
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(false);
             _crudOperation.Setup(x => x.InsertRecord(It.IsAny<InsertRecordRequest>())).Returns(Task.CompletedTask);
             _dialCodeHelper.Setup(x => x.GetDialCodeAsync(It.IsAny<string>())).ReturnsAsync("+20");
-            // _mockedLazyCache.Setup();
             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
@@ -131,7 +126,6 @@ namespace EmployeeManagementSystem.Test
             //Assert
             Assert.NotNull(result);
             var apiResponse = Assert.IsType<ApiResponse>(result);
-            //var data = Assert.IsAssignableFrom<List<EmployeeDto>>(apiResponse.data);
 
             Assert.True(apiResponse.Success);
             Assert.Equal("Onboarding successful", apiResponse.Message);
@@ -146,20 +140,17 @@ namespace EmployeeManagementSystem.Test
             InsertRecordRequest employeeRecord = new InsertRecordRequest
             {
 
-                FirstName = "Ranbir",
-                LastName = "Kapoor",
-                Scn = "raha",
-                Age = 42,
+                FirstName = "Test_First_Name_1",
+                LastName = "Test_Last_Name_1",
+                Scn = "test_scn_1",
+                Age = 20,
                 PhoneNumber = "13326111",
-                Role = "Marketing",
+                Role = "Test_Role",
                 Salary = 2933,
-                CountryName = "Egypt"
+                CountryName = "Test_Country_1"
 
             };
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(false);
-            //_crudOperation.Setup(x => x.InsertRecord(It.IsAny<InsertRecordRequest>())).Returns(Task.CompletedTask);
-            //_dialCodeHelper.Setup(x => x.GetDialCodeAsync(It.IsAny<string>())).ReturnsAsync("+20");
-            // _mockedLazyCache.Setup();
             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
@@ -167,7 +158,6 @@ namespace EmployeeManagementSystem.Test
             //Assert
             Assert.NotNull(result);
             var apiResponse = Assert.IsType<ApiResponse>(result);
-            //var data = Assert.IsAssignableFrom<List<EmployeeDto>>(apiResponse.data);
 
             Assert.False(apiResponse.Success);
             Assert.Equal("Exception occured:Invalid phone number. Please try again with a valid phone number.", apiResponse.Message);
@@ -192,9 +182,7 @@ namespace EmployeeManagementSystem.Test
 
             };
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(true);
-            //_crudOperation.Setup(x => x.InsertRecord(It.IsAny<InsertRecordRequest>())).Returns(Task.CompletedTask);
             _dialCodeHelper.Setup(x => x.GetDialCodeAsync(It.IsAny<string>())).ReturnsAsync("+20");
-            // _mockedLazyCache.Setup();
             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
@@ -202,7 +190,6 @@ namespace EmployeeManagementSystem.Test
             //Assert
             Assert.NotNull(result);
             var apiResponse = Assert.IsType<ApiResponse>(result);
-            //var data = Assert.IsAssignableFrom<List<EmployeeDto>>(apiResponse.data);
 
             Assert.False(apiResponse.Success);
             Assert.Equal("Exception occured:Pre-existing phone Number. Please try again with a valid phone number.", apiResponse.Message);
@@ -211,6 +198,7 @@ namespace EmployeeManagementSystem.Test
         [Fact]
         public async Task Delete_Employee_Success()
         {
+            //Arrange
             _crudOperation.Setup(x => x.DeleteRecordById(It.IsAny<string>())).ReturnsAsync(true);
             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
             //Act
@@ -219,7 +207,6 @@ namespace EmployeeManagementSystem.Test
             //Assert
             Assert.NotNull(result);
             var apiResponse = Assert.IsType<ApiResponse>(result);
-            //var data = Assert.IsAssignableFrom<List<EmployeeDto>>(apiResponse.data);
 
             Assert.True(apiResponse.Success);
             Assert.Equal("Employee Deleted Successfully", apiResponse.Message);
@@ -229,6 +216,7 @@ namespace EmployeeManagementSystem.Test
         [Fact]
         public async Task Delete_Employee_Failure()
         {
+            //Arrange
             _crudOperation.Setup(x => x.DeleteRecordById(It.IsAny<string>())).ReturnsAsync(false);
             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
             //Act
@@ -237,7 +225,6 @@ namespace EmployeeManagementSystem.Test
             //Assert
             Assert.NotNull(result);
             var apiResponse = Assert.IsType<ApiResponse>(result);
-            //var data = Assert.IsAssignableFrom<List<EmployeeDto>>(apiResponse.data);
 
             Assert.False(apiResponse.Success);
             Assert.Equal("Employee Deletion Failed", apiResponse.Message);
