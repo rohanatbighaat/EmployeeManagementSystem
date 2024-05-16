@@ -43,7 +43,6 @@ namespace EmployeeManagementSystem.Helpers
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // set clock skew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
@@ -53,10 +52,10 @@ namespace EmployeeManagementSystem.Helpers
                 //Attach user to context on successful JWT validation
                 context.Items["User"] = await _crudOperationDL.GetRecordById(userId);
             }
-            catch
+            catch(Exception ex)
             {
-                //Do nothing if JWT validation fails
                 // user is not attached to context so the request won't have access to secure routes
+                throw new Exception("JWT Authentication Failed:  " + ex.Message);
             }
         }
     }

@@ -22,6 +22,9 @@ namespace EmployeeManagementSystem.Services
             _dialCodeHelper = dialCodeHelper;
         }
 
+        /**
+         * Method that deletes the employee record by id [Authenticated]
+         **/
         public async Task<ApiResponse> DeleteRecordById(string ID)
         {
             ApiResponse response = new ApiResponse();
@@ -46,6 +49,9 @@ namespace EmployeeManagementSystem.Services
 
             }
 
+        /**
+         * Method to retrieve all the employee records
+         **/
         public async Task<ApiResponse> GetAllRecord()
         {
             ApiResponse response = new ApiResponse();
@@ -78,6 +84,9 @@ namespace EmployeeManagementSystem.Services
             return response;
           }
 
+        /**
+         *  Method to retrieve a particular employee record by id
+         **/
         public async Task<ApiResponse> GetRecordById(string ID)
         {
             ApiResponse response = new ApiResponse();
@@ -107,6 +116,9 @@ namespace EmployeeManagementSystem.Services
             return response;
         }
 
+        /**
+         *  Method to insert an employee record [Authenticated]
+         **/
         public async Task<ApiResponse> InsertRecord(InsertRecordRequest request)
         {
             ApiResponse response = new ApiResponse();
@@ -142,6 +154,9 @@ namespace EmployeeManagementSystem.Services
             return response;
         }
 
+        /**
+         *  Method the salary of an employee record by id [Authenticated]
+         **/
         public async Task<ApiResponse> UpdateRecordById(string ID, int salary)
         {
             ApiResponse response = new ApiResponse();

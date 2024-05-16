@@ -22,7 +22,9 @@ namespace EmployeeManagementSystem.Services
             _crudOperationDL = crudOperationDL;
 
         }
-        
+        /**
+         * Method that initiates the generation of auth token
+         **/
         public async Task<AuthResponse?> Authenticate(AuthRequest request)
         {
             request.Scn= _scnEncoder.EncodeScn(request.Scn);
@@ -36,6 +38,9 @@ namespace EmployeeManagementSystem.Services
 
         }
 
+        /**
+         * Method that generates the jwt auth token
+         **/
         private async Task<string> generateJwtToken(InsertRecordRequest user)
         {
             var tokenHandler= new JwtSecurityTokenHandler();
