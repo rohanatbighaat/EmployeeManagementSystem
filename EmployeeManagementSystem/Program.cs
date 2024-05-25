@@ -22,6 +22,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<EmployeeDto>();
 builder.Services.AddSingleton<Country>();
 builder.Services.AddSingleton<DialCodeHelper>();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddLazyCache();
 builder.Services.AddRateLimiter( rateLimiterOptions =>
 {

@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Dto;
+﻿using AutoMapper;
+using EmployeeManagementSystem.Dto;
 using EmployeeManagementSystem.Exceptions;
 using EmployeeManagementSystem.Helpers;
 using EmployeeManagementSystem.Model;
@@ -15,11 +16,14 @@ namespace EmployeeManagementSystem.Services
         private readonly ScnEncoder _scnEncoder;
 
         private readonly DialCodeHelper _dialCodeHelper;
-        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, DialCodeHelper dialCodeHelper)
+
+        private readonly IMapper _mapper;
+        public EmployeeService(ICrudOperationDL crudOperationDL, ScnEncoder scnEncoder, DialCodeHelper dialCodeHelper, IMapper mapper)
         {
             _crudOperationDL = crudOperationDL;
             _scnEncoder = scnEncoder;
             _dialCodeHelper = dialCodeHelper;
+            _mapper= mapper;
         }
 
         /**
@@ -61,16 +65,8 @@ namespace EmployeeManagementSystem.Services
             { 
                 response.data = new List<EmployeeDto>();
                 List<InsertRecordRequest> recordList = await _crudOperationDL.GetAllRecord();
-                foreach (InsertRecordRequest record in recordList)
-                {
-                    EmployeeDto emp = new EmployeeDto();
-                    emp.FirstName= record.FirstName;
-                    emp.LastName= record.LastName;
-                    emp.PhoneNumber= record.PhoneNumber;
-                    emp.Role= record.Role;
-                    response.data.Add(emp);
+                response.data= _mapper.Map<List<EmployeeDto>>(recordList);
 
-                }
                 if (response.data.Count == 0)
                 {
                     response.Message = "No data to display";
@@ -95,13 +91,7 @@ namespace EmployeeManagementSystem.Services
             try
             {
                 InsertRecordRequest record = await _crudOperationDL.GetRecordById(ID);   
-                response.data = new List<EmployeeDto>();
-                EmployeeDto emp = new EmployeeDto();
-                emp.FirstName = record.FirstName;
-                emp.LastName = record.LastName;
-                emp.PhoneNumber = record.PhoneNumber;
-                emp.Role = record.Role;
-                response.data.Add(emp);
+                response.data = _mapper.Map<List<EmployeeDto>>(record);
                 if (response.data.Count == 0)
                 {
                     response.Message = "No data to display";
