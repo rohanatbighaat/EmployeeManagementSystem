@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace EmployeeManagementSystem.Test
 {
@@ -20,11 +21,13 @@ namespace EmployeeManagementSystem.Test
         private readonly Mock<ICrudOperationDL> _crudOperation;
         private readonly Mock<ScnEncoder> _scnEncoder;
         private readonly Mock<DialCodeHelper> _dialCodeHelper;
+        private readonly Mock<IMapper> _mapper;
         public EmployeeServiceTest()
         {
             _crudOperation = new Mock<ICrudOperationDL>();
             _scnEncoder = new Mock<ScnEncoder>();
             _dialCodeHelper = new Mock<DialCodeHelper>();
+            _mapper= new Mock<IMapper>();
         }
         [Fact]
         public async Task GetAll_Employee_Success()
@@ -53,10 +56,29 @@ namespace EmployeeManagementSystem.Test
                   Salary= 2943,
                   CountryName= "Test_Country_2"
             }
-            }; 
+            };
+
+            var employeeDtoList = new List<EmployeeDto>
+            {
+                new EmployeeDto
+                    {
+                        FirstName = "Test_First_Name_1",
+                        LastName = "Test_Last_Name_1",
+                        Role = "Test_Role",
+                        PhoneNumber= "1332611111"
+                    },
+                new EmployeeDto
+                    {
+                        FirstName = "Test_First_Name_2",
+                        LastName = "Test_Last_Name_2",
+                        Role = "Test_Role",
+                        PhoneNumber= "1332669111"
+                    }
+            };
 
             _crudOperation.Setup(x => x.GetAllRecord()).ReturnsAsync(employeeRecords);
-             var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            _mapper.Setup(m => m.Map<List<EmployeeDto>>(It.IsAny<List<InsertRecordRequest>>())).Returns(employeeDtoList);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.GetAllRecord();
 
@@ -86,8 +108,21 @@ namespace EmployeeManagementSystem.Test
                 CountryName = "Test_Country_1"
             };
 
+            var employeeDtoList = new List<EmployeeDto>
+            {
+                new EmployeeDto
+                    {
+                        FirstName = "Test_First_Name_1",
+                        LastName = "Test_Last_Name_1",
+                        Role = "Test_Role",
+                        PhoneNumber= "1332611111"
+                    }
+            };
+
             _crudOperation.Setup(x => x.GetRecordById(It.IsAny<string>())).ReturnsAsync(employeeRecord);
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            _mapper.Setup(m => m.Map<List<EmployeeDto>>(It.IsAny<InsertRecordRequest>())).Returns(employeeDtoList);
+
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.GetRecordById("valid_employee_id");
 
@@ -119,7 +154,7 @@ namespace EmployeeManagementSystem.Test
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(false);
             _crudOperation.Setup(x => x.InsertRecord(It.IsAny<InsertRecordRequest>())).Returns(Task.CompletedTask);
             _dialCodeHelper.Setup(x => x.GetDialCodeAsync(It.IsAny<string>())).ReturnsAsync("+20");
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
 
@@ -151,7 +186,7 @@ namespace EmployeeManagementSystem.Test
 
             };
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(false);
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
 
@@ -183,7 +218,7 @@ namespace EmployeeManagementSystem.Test
             };
             _crudOperation.Setup(x => x.DoesPhoneNumberExists(It.IsAny<string>())).ReturnsAsync(true);
             _dialCodeHelper.Setup(x => x.GetDialCodeAsync(It.IsAny<string>())).ReturnsAsync("+20");
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.InsertRecord(employeeRecord);
 
@@ -200,7 +235,7 @@ namespace EmployeeManagementSystem.Test
         {
             //Arrange
             _crudOperation.Setup(x => x.DeleteRecordById(It.IsAny<string>())).ReturnsAsync(true);
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.DeleteRecordById("valid_employee_id");
 
@@ -218,7 +253,7 @@ namespace EmployeeManagementSystem.Test
         {
             //Arrange
             _crudOperation.Setup(x => x.DeleteRecordById(It.IsAny<string>())).ReturnsAsync(false);
-            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object);
+            var _service = new EmployeeService(_crudOperation.Object, _scnEncoder.Object, _dialCodeHelper.Object, _mapper.Object);
             //Act
             var result = await _service.DeleteRecordById("valid_employee_id");
 
