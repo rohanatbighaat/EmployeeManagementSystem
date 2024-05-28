@@ -6,6 +6,7 @@ using EmployeeManagementSystem.Model;
 using EmployeeManagementSystem.Repository;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace EmployeeManagementSystem.Services
 {
@@ -118,7 +119,7 @@ namespace EmployeeManagementSystem.Services
             {
                 request.CreatedAt = DateTime.Now.ToString();
                 request.UpdatedAt = string.Empty;
-                if (request.PhoneNumber.Length != 10)
+                if (!Regex.IsMatch(request.PhoneNumber, @"^\d{10}$"))
                 {
                     throw new InvalidPhoneNumberException("Invalid phone number. Please try again with a valid phone number.");
                 }
